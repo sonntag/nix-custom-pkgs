@@ -38,6 +38,17 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -Dm755 codebase-memory-mcp $out/bin/codebase-memory-mcp
+
+    # Extract skills by running install against a fake HOME
+    export HOME=$TMPDIR/fakehome
+    mkdir -p $HOME/.claude
+    echo '{}' > $HOME/.claude/settings.json
+    $out/bin/codebase-memory-mcp install -y || true
+
+    if [ -d "$HOME/.claude/skills" ]; then
+      mkdir -p $out/share
+      cp -r $HOME/.claude/skills $out/share/claude-code-skills
+    fi
   '';
 
   meta = with lib; {
