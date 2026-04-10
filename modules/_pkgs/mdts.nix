@@ -6,18 +6,19 @@
   npm-lockfile-fix,
 }:
 let
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "unhappychoice";
     repo = "mdts";
     tag = "v${version}";
-    hash = "sha256-bNeW3rrFItNoRdoO5PwrcNQG5oTc+FkGBvMlOFIe3BY=";
+    hash = "sha256-KVf0iIKyvitnvBdcu+7AmnOTG8H9cuARGdbimHwS0Zc=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-EXk1X319pGKYJRyE4D1774ep17aUDXSnapJUyPlXv4A=";
+    fetcherVersion = 2;
+    hash = "sha256-FtaBIbNVh+254zoj9NRSh2bnDSCFO9GN/LFQdHJa3j0=";
     nativeBuildInputs = [npm-lockfile-fix];
     postPatch = ''
       ${lib.getExe npm-lockfile-fix} package-lock.json
@@ -28,7 +29,8 @@ let
     pname = "mdts-frontend";
     inherit version src;
     sourceRoot = "${src.name}/packages/frontend";
-    npmDepsHash = "sha256-6fydDKb8lMmKrP6RrA2BUbc7QRLp+80qCL+zcnv+XUs=";
+    npmDepsHash = "sha256-i+Y47KkG5tHB/wfaOCBdmmGzH5o2YCY2Bc1cUZL9P08=";
+    npmDepsFetcherVersion = 2;
 
     buildPhase = ''
       runHook preBuild
@@ -49,6 +51,7 @@ in
 buildNpmPackage {
   pname = "mdts";
   inherit version src npmDeps;
+  npmDepsFetcherVersion = 2;
 
   postPatch = ''
     cp ${npmDeps}/package-lock.json package-lock.json
