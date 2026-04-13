@@ -4,5 +4,5 @@
   perSystem.pkgsDirectory = ../packages;
 
   flake.overlays.default = final: _prev:
-    withSystem final.stdenv.hostPlatform.system ({packages, ...}: packages);
+    inputs.self.packages.${final.stdenv.hostPlatform.system};
 }
